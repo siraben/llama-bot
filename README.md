@@ -9,22 +9,36 @@ available datasets exclusively.
 ## Usage
 You should clone and build
 [llama.cpp](https://github.com/ggerganov/llama.cpp) and add
-[bot.py](bot.py) to the project directory.  Make sure you change the
-token at the end of the script.
+[bot.py](bot.py) to the project directory.  Make sure the environment
+variable `DISCORD_TOKEN` is set to your Discord token.
 
 To use the bot, type `!llama` followed by the options and arguments
 for generating text. Here are the available options:
 
 ```
-    -t, --threads: the number of threads to use during computation (default is 8).
-    -n, --n_predict: the number of tokens to predict (default is 128).
-    -p, --prompt: the prompt to start generation with (required).
-    -c, --ctx_size: the size of the prompt context (default is 512).
-    -k, --top_k: top-k sampling (default is 40).
-    --top_p: top-p sampling (default is 0.9).
-    -s, --seed: RNG seed (default is -1).
-    --temp: temperature (default is 0.8).
-    --repeat_penalty: penalize repeat sequence of tokens (default is 1.3).
+usage: !llama [-h] [-t THREADS] [-n N_PREDICT] -p PROMPT [-c CTX_SIZE]
+              [-k TOP_K] [--top_p TOP_P] [-s SEED] [--temp TEMP]
+              [--repeat_penalty REPEAT_PENALTY]
+
+Llama Language Model Bot
+
+options:
+  -h, --help            show this help message and exit
+  -t THREADS, --threads THREADS
+                        number of threads to use during computation
+  -n N_PREDICT, --n_predict N_PREDICT
+                        number of tokens to predict
+  -p PROMPT, --prompt PROMPT
+                        prompt to start generation with
+  -c CTX_SIZE, --ctx_size CTX_SIZE
+                        size of the prompt context
+  -k TOP_K, --top_k TOP_K
+                        top-k sampling
+  --top_p TOP_P         top-p sampling
+  -s SEED, --seed SEED  RNG seed
+  --temp TEMP           temperature
+  --repeat_penalty REPEAT_PENALTY
+                        penalize repeat sequence of tokens
 ```
 
 For example, to generate (multiline) text up to 256 tokens using the
@@ -42,7 +56,7 @@ Here's what I got:
 ![Screenshot](./screenshot.png)
 
 ## Things to do
-- [ ] handle incorrect argument passing better
+- [x] handle incorrect argument passing better
 
 ## License
 

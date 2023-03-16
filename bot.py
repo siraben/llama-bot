@@ -8,6 +8,7 @@ import argparse
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+token = os.environ['DISCORD_TOKEN']
 
 @bot.event
 async def on_ready():
@@ -21,7 +22,7 @@ async def on_message(message):
     if message.content.startswith('!llama'):
         try:
             # Parse the command options using argparse
-            parser = argparse.ArgumentParser(prog='!llama', description='Llama Language Model Bot')
+            parser = argparse.ArgumentParser(prog='!llama', description='LLaMa Language Model Bot')
             parser.add_argument('-t', '--threads', type=int, default=8, help='number of threads to use during computation')
             parser.add_argument('-n', '--n_predict', type=int, default=128, help='number of tokens to predict')
             parser.add_argument('-p', '--prompt', type=str, required=True, help='prompt to start generation with')
@@ -31,7 +32,11 @@ async def on_message(message):
             parser.add_argument('-s', '--seed', type=int, default=-1, help='RNG seed')
             parser.add_argument('--temp', type=float, default=0.8, help='temperature')
             parser.add_argument('--repeat_penalty', type=float, default=1.3, help='penalize repeat sequence of tokens')
-            args = parser.parse_args(shlex.split(message.content[7:], posix=True))
+            try:
+                args = parser.parse_args(shlex.split(message.content[7:], posix=True))
+            except SystemExit:
+                await message.channel.send(f'```\n{parser.format_help()}\n```')
+                return
             model = './models/13B/ggml-model-q4_0.bin'
 
             # Build the command to execute
@@ -48,10 +53,6 @@ async def on_message(message):
                 await message.channel.send(result.stdout[:2000])
             else:
                 await message.channel.send('An error occurred while running the command.')
-        except argparse.ArgumentError as e:
-            # Send a message back to the channel if argparse throws an error
-            await message.channel.send(f'An error occurred: {str(e)}\nUsage: !llama [-h] [-m MODEL] [-t THREADS] [-n N_PREDICT] -p PROMPT')
-
         except Exception as e:
             # Send a message back to the channel if an exception occurs
             await message.channel.send(f'An error occurred: {str(e)}')
@@ -59,4 +60,4 @@ async def on_message(message):
     elif message.content.startswith('!'):
         await message.channel.send('Invalid command. Please use the !llama command.')
 
-bot.run('token')
+bot.run(token)
