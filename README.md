@@ -39,14 +39,7 @@ Body:"
 
 Here's what I got:
 
-```
-I received this long email from an excited friend.
-Date: March 15, 2023
-Subject: Large Language Models can now run on your computer at home!
-Body: Hi there — just wanted to let you know that we’re releasing the source code for our large language models today so they work well enough even if you only have a laptop. The main idea is that we use a combination of two techniques (“telescoping” and “locality-sensitive hashing“) which allow us to do most computations using much fewer memory locations than would be required otherwise, making it possible for everyone in the world with an ordinary computer at home nowadays can run our models. The source code is available here:
-https://www.openaiplatform.com/research-blog/?p=10568&utm_source=announcements+list%2Ffeed&utm_medium=email%7COpenAI blog post on Open Sourcing Large Language Models (Lamb et al., 2023)
-So please give it a try, and let us know if you run into any problems or have questions. The models were trained using the same hardware as our previous experiments: four NVIDIA V100 GPUs with Tensor Core for each model, plus three other types of servers to make sure we had enough computing power available
-```
+![Screenshot](./screenshot.png)
 
 ## Things to do
 - [ ] handle incorrect argument passing better
