@@ -37,6 +37,7 @@ async def on_message(message):
                 args = parser.parse_args(shlex.split(message.content[7:], posix=True))
             except SystemExit:
                 await message.channel.send(f'```\n{parser.format_help()}\n```')
+                await message.add_reaction('❌')
                 return
             model = './models/13B/ggml-model-q4_0.bin'
 
@@ -44,6 +45,9 @@ async def on_message(message):
 
             # Build the command to execute
             command = ['./main', '-m', model, '-t', str(args.threads), '-n', str(args.n_predict), '-c', str(args.ctx_size), '--temp', str(args.temp), '--top_k', str(args.top_k), '--top_p', str(args.top_p), '--repeat_penalty', str(args.repeat_penalty), '-s', str(args.seed), '--repeat_last_n', str(args.repeat_last_n), '-p', args.prompt]
+
+            # react to the message with a llama emoji
+            await message.add_reaction('🦙')
 
             # Send typing notification
             async with message.channel.typing():
@@ -53,14 +57,19 @@ async def on_message(message):
             # Send the output back to the channel
             if result.returncode == 0:
                 if len(result.stdout) <= 2000:
-                    await message.channel.send(result.stdout)
+                    # reply to the message
+                    await message.reply(result.stdout)
                 else:
                     # Upload the output as a file
                     with open('llama-output.txt', 'w') as f:
                         f.write(result.stdout)
-                    await message.channel.send(file=discord.File('llama-output.txt'))
+                    await message.reply(file=discord.File('llama-output.txt'))
+                # react to the message with a checkmark
+                await message.add_reaction('✅')
             else:
                 await message.channel.send('An error occurred while running the command.')
+                # react to the message with a cross
+                await message.add_reaction('❌')
         except Exception as e:
             # Send a message back to the channel if an exception occurs
             await message.channel.send(f'An error occurred: {str(e)}')
