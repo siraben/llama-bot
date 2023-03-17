@@ -60,19 +60,18 @@ async def on_message(message):
                     # reply to the message
                     await message.reply(result.stdout)
                 else:
-                    # Upload the output as a file
-                    with open('llama-output.txt', 'w') as f:
-                        f.write(result.stdout)
-                    await message.reply(file=discord.File('llama-output.txt'))
+                    # send the message 2000 characters at a time
+                    for i in range(0, len(result.stdout), 2000):
+                        await message.channel.send(result.stdout[i:i+2000])
                 # react to the message with a checkmark
                 await message.add_reaction('✅')
             else:
                 await message.channel.send('An error occurred while running the command.')
-                # react to the message with a cross
                 await message.add_reaction('❌')
         except Exception as e:
             # Send a message back to the channel if an exception occurs
             await message.channel.send(f'An error occurred: {str(e)}')
+            await message.add_reaction('❌')
 
     elif message.content.startswith('!'):
         await message.channel.send('Invalid command. Please use the !llama command.')
