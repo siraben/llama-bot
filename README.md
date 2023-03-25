@@ -1,7 +1,7 @@
-# LLaMa Discord Bot
+# LLaMA Discord Bot
 
-This is a Discord bot that uses the LLaMa language model to generate
-text based on a user's input prompt. LLaMa is a collection of open and
+This is a Discord bot that uses the LLaMA language model to generate
+text based on a user's input prompt. LLaMA is a collection of open and
 efficient foundation language models ranging from 7B to 65B
 parameters, which were trained on trillions of tokens using publicly
 available datasets exclusively.
@@ -20,7 +20,7 @@ usage: !llama [-h] [-t THREADS] [-n N_PREDICT] -p PROMPT [-c CTX_SIZE]
               [-k TOP_K] [--top_p TOP_P] [-s SEED] [--temp TEMP]
               [--repeat_penalty REPEAT_PENALTY]
 
-Llama Language Model Bot
+LLaMA Language Model Bot
 
 options:
   -h, --help            show this help message and exit
