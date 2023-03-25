@@ -22,7 +22,7 @@ async def on_message(message):
     if message.content.startswith('!llama'):
         try:
             # Parse the command options using argparse
-            parser = argparse.ArgumentParser(prog='!llama', description='LLaMa Language Model Bot')
+            parser = argparse.ArgumentParser(prog='!llama', description='LLaMA Language Model Bot')
             parser.add_argument('-t', '--threads', type=int, default=8, help='number of threads to use during computation')
             parser.add_argument('-n', '--n_predict', type=int, default=128, help='number of tokens to predict')
             parser.add_argument('-p', '--prompt', type=str, required=True, help='prompt to start generation with')
