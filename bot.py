@@ -38,13 +38,15 @@ async def on_message(message):
         return
 
     if message.content.startswith(OLD_BOT_COMMAND):
-        await handle_llama_command(message)
+        await handle_llama_command(message, new_model=False)
     elif message.content.startswith(NEW_BOT_COMMAND):
-        await handle_llama_command(message)
+        await handle_llama_command(message, new_model=True)
+    elif message.content.startswith(LLAMA_COMMAND):
+        await handle_llama_command(message, new_model=True)
     else:
         await message.channel.send(f'Invalid command. Please use {NEW_BOT_COMMAND} or {OLD_BOT_COMMAND}.')
 
-async def handle_llama_command(message):
+async def handle_llama_command(message, new_model=True):
     async with lock:
         try:
             # Parse the command options using argparse
@@ -67,11 +69,13 @@ async def handle_llama_command(message):
             args.n_predict = min(args.n_predict, MAX_TOKENS.get(args.model, MAX_TOKENS[DEFAULT_MODEL]))
 
             # Build the command to execute to execute
-            if NEW_BOT_COMMAND in message.content:
+            if new_model:
                 model = 'gpt4all-lora-unfiltered-quantized.bin'
                 command = ['./gpt4all-lora-quantized-OSX-m1', '-m', model, '-t', str(args.threads), '-n', str(args.n_predict), '-p', args.prompt]
             else:
                 command = ['./chat', '-m', 'ggml-model-q4_0.bin', '-n', str(args.n_predict), '-t', str(args.threads), '-p', args.prompt]
+
+            print(f'Executing command: {command}')
 
             # react to the message with a llama emoji
             await message.add_reaction('🦙')
@@ -89,7 +93,7 @@ async def handle_llama_command(message):
             # Send the output back to the channel
             if process.returncode == 0:
                 if len(result_stdout) <= 2000:
-                    response_prefix = "**GPT4All:** " if NEW_BOT_COMMAND in message.content else "**Alpaca:** "
+                    response_prefix = "**GPT4All:** " if new_model else "**Alpaca:** "
                     result_stdout = response_prefix + result_stdout
                     # reply to the message
                     await message.reply(result_stdout)
