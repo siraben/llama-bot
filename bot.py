@@ -47,6 +47,8 @@ async def on_message(message):
         await message.channel.send(f'Invalid command. Please use {NEW_BOT_COMMAND} or {OLD_BOT_COMMAND}.')
 
 async def handle_llama_command(message, new_model=True):
+    # react with hourglass
+    await message.add_reaction('⏳')
     async with lock:
         try:
             # Parse the command options using argparse
@@ -106,15 +108,20 @@ async def handle_llama_command(message, new_model=True):
             else:
                 await message.channel.send('An error occurred while running the command.')
                 await message.add_reaction('❌')
-        except argparse.ArgumentError as e:
+
+        except (argparse.ArgumentError, SystemExit) as e:
             await message.channel.send(f'Invalid command arguments: {str(e)}')
             await message.add_reaction('❌')
         except (discord.errors.HTTPException, asyncio.TimeoutError) as e:
             await message.channel.send(f'Error executing command: {str(e)}')
             await message.add_reaction('❌')
+        except argparse.ArgumentError as e:
+            await message.channel.send(f'Invalid command arguments: {str(e)}')
+            await message.add_reaction('❌')
         except Exception as e:
             # Send a message back to the channel if an exception occurs
             await message.channel.send(f'An error occurred: {str(e)}')
             await message.add_reaction('❌')
+    await message.remove_reaction('⏳', bot.user)
 
 bot.run(DISCORD_TOKEN)
